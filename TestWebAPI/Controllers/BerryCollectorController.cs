@@ -45,23 +45,14 @@ namespace TestWebAPI.Controllers
             return BlankBerry;
 
         }
-
-        [HttpGet]
-        public async Task<ActionResult<List<Berry>>> GetBerryList()
+        public async Task<List<Berry>> getBerryList()
         {
-            BerryRoot result = null;
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                httpClient.BaseAddress = new Uri("https://pokeapi.co/api/v2/berry");
-                HttpResponseMessage response = await httpClient.GetAsync(httpClient.BaseAddress);
-                result = JsonConvert.DeserializeObject<BerryRoot>(await response.Content.ReadAsStringAsync());
-
-                //500 internal server error
-                //404 not found resource
-            }
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri("https://pokeapi.co/api/v2/berry");
+            HttpResponseMessage response = await httpClient.GetAsync(httpClient.BaseAddress);
+            BerryRoot result = JsonConvert.DeserializeObject<BerryRoot>(await response.Content.ReadAsStringAsync());
             
-            return Ok(result.results);
+            return result.results;
         }
     }
 }
